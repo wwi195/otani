@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>体温入力サイト</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>体温入力サイト</h1>
+    <div class="input-container">
+        <label for="name">名前: </label>
+            <select id="name" name="name">
+                <option value="めいさ">めいさ</option>
+                <option value="B">B</option>
+                <option value="C">C</option>
+                <option value="D">D</option>
+                <option value="E">E</option>
+                <option value="B">F</option>
+                <option value="C">G</option>
+                <option value="D">H</option>
+                <option value="E">I</option>
+                <option value="A">j</option>
+                <option value="B">K</option>
+                <option value="C">L</option>
+                <option value="D">M</option>
+                <option value="E">O</option>
+                <option value="B">P</option>
+                <option value="C">Q</option>
+                <option value="D">R</option>
+                <option value="E">S</option>
+                <option value="T">T</option>
+        </select>
+        <label for="temperature">体温: </label>
+        <input type="number" step="0.1" id="temperature" name="temperature">
+        <button id="addButton">追加</button>
+    </div>
+    <div id="dataContainer">
+        <!-- ここに体温データが表示されます -->
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
