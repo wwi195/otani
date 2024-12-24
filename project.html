@@ -12,5 +12,13 @@
 </head>
 <body>
     <p>こんにちは、ようこそ！絶望こそ希望</p>
+        今日は <span id="date"></span> です</p>
+        <script>
+        const today = new Date();
+        const formattedDate = today.gettFullyear() + "年" +
+                              (today.getMonth() + 1) + "月" +
+                               today.getDate() + "日";
+        document.getElementById("date").textContent = formattedDate;
+        </script>
 </body>
 </html>
