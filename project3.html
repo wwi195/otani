@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>名前を入力して挨拶</title>
+    <style>
+        body {
+            font-family: arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+            padding: 5px 10px;
+        }
+        #greeding {
+            font-size: 18px;
+            margin: 10px;
+            padding: 5px 10px;
+        }
+        
+    </style>
+</head>
+<body>
+    <h1>名前を入力して挨拶</h1>
+    <input type="text" id=nameInput" placeholder="名前を入力してください">
+    <button onclick="sayHello()">挨拶する</button>
+    <p id="greeting"></p>
+    
+    <script>
+        function sayHello() {
+            const name = document.getElementById("nameInput").value;
+            if (name) {
+                document.getElementById("greeting").textContent = `こんにちは、${name}さん！`;
+            } else {
+                document.getElementById("greeting").textContrnt = "名前を入力してください";
+            }
+        }
+    </script>
+</body>
+</html>
