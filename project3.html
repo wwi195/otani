@@ -11,7 +11,7 @@
             margin: 50px;
             padding: 5px 10px;
         }
-        #greeding {
+        #greeting {
             font-size: 18px;
             margin: 10px;
             padding: 5px 10px;
@@ -21,7 +21,7 @@
 </head>
 <body>
     <h1>名前を入力して挨拶</h1>
-    <input type="text" id=nameInput" placeholder="名前を入力してください">
+    <input type="text" id="nameInput" placeholder="名前を入力してください">
     <button onclick="sayHello()">挨拶する</button>
     <p id="greeting"></p>
     
@@ -31,7 +31,7 @@
             if (name) {
                 document.getElementById("greeting").textContent = `こんにちは、${name}さん！`;
             } else {
-                document.getElementById("greeting").textContrnt = "名前を入力してください";
+                document.getElementById("greeting").textContent = "名前を入力してください";
             }
         }
     </script>
