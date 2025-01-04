@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang=“ja”>
+<head>
+    <meta chart=“viewport” content=“width=device-width, initial-scale=1.0”>
+    <title>ランダムな数字</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+        button {
+            font-size: 20px;
+            padding: 10px 20px;
+            backround-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            backround-color: #45a049;
+        }
+        p {
+            font-size: 24px;
+            color: #555
+        }
+    </style>
+</head>
+<body>
+    <h1>ランダムな数字を表示</h1>
+    <button onclick="showRandomNumber()">数字を表示</button>
+    <p id="rondomNumber"></p>
+    
+    <script>
+        function showRondomNumbet() {
+            const rondomNum = Math.floor(Math.rondom() * 100) + 1;
+            document.getElementById("rondomNumber").textContent = `ランダムな数字: ＄{rondomNum}`;
+        }
+    </script>
+</body>
+</html>
+            
