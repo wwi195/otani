@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html lang=“ja”>
+<html lang="ja">
 <head>
-    <meta chart=“viewport” content=“width=device-width, initial-scale=1.0”>
+    <meta chart="viewport" content=“width=device-width, initial-scale=1.0”>
     <title>ランダムな数字</title>
     <style>
         body {
@@ -12,7 +12,7 @@
         button {
             font-size: 20px;
             padding: 10px 20px;
-            backround-color: #4CAF50;
+            background-color: #4CAF50;
             color: white;
             border: none;
             cursor: pointer;
@@ -30,12 +30,12 @@
 <body>
     <h1>ランダムな数字を表示</h1>
     <button onclick="showRandomNumber()">数字を表示</button>
-    <p id="rondomNumber"></p>
+    <p id="randomNumber"></p>
     
     <script>
-        function showRondomNumbet() {
-            const rondomNum = Math.floor(Math.rondom() * 100) + 1;
-            document.getElementById("rondomNumber").textContent = `ランダムな数字: ＄{rondomNum}`;
+        function showRandomNumbet() {
+            const rondomNum = Math.floor(Math.random() * 100) + 1;
+            document.getElementById("randomNumber").textContent = `ランダムな数字: ${rondomNum}`;
         }
     </script>
 </body>
