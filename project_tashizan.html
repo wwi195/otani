@@ -39,4 +39,10 @@
             const num2 = parseFloat(document.getElementById("num2").value);
             if (!isNaN(num1) && !isNaN(num2)) {
                 document.getElementById("result").textContent = `結果: ${num1 + num2}`;
-                
+                } else {
+                    document.getElementById("result").textContent = "数字を入力してください";
+                }
+            }
+        </script>
+    </body>
+    </html>
