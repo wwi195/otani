@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Doリスト</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+        input {
+            padding: 10px;
+            font-size: 16px;
+            width: 200px;
+        }
+        button {
+            padding: 10px;
+            font-size: 16px;
+            margin-left: 5px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            font-size: 18px;
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>To-Doリスト</h1>
+    <input type="text" id="taskInput" placeholder="やることを入力">
+    <button onclick="addTask()">追加</button>
+    <ul id="taskList"></ul>
+    
+    <script>
+        function addTask() {
+            const task = document.getElementById("taskInput").value;
+            if (task) {
+                const li = document.createElement("li");
+                li.textContent = task;
+                document.getElementById("taskList").appendChild(li);
+                document.getElementById("taskInput").value = "";
+            } else {
+                alert("やることを入力してください！");
+            }
+        }
+    </script>
+</body>
+</html>
