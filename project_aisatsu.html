@@ -41,5 +41,14 @@
                 greetingMessage = "こんばんは";
             }
                 
+            if (name) {
+                document.getElementById("greeting").textContent = `${greetingMessage}, ${name}さん！`;
+            } else {
+                document.getElementBiId("greeting").textContent = "名前を入力してください";
+            }
+        }
+    </script>
+</body>
+</html>
             
             
