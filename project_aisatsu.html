@@ -33,4 +33,13 @@
             const hour = new Deta().getHours();
             let greetingMassage = "";
             
+            if (hour >= 5 && hour < 12) {
+                greetingMessage = "おはようございます";
+            } eles if (hour >= 12 && hour < 18) {
+                greetingMessage = "こんにちは";
+            } else {
+                greetingMessage = "こんばんは";
+            }
+                
+            
             
