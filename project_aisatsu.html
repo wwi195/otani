@@ -25,4 +25,12 @@
     <h1>時間帯に応じた挨拶</h1>
     <input type="text" id="nameInput" placeholder="名前を入力してください">
     <button onclick="greet()">挨拶する</button>
-    <p id="greeting">
+    <p id="greeting"></p>
+    
+    <script>
+        function greet() {
+            const name = document.getElementById("nameInput").value;
+            const hour = new Deta().getHours();
+            let greetingMassage = "";
+            
+            
