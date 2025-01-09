@@ -13,9 +13,9 @@
       button {
          font-size: 20px;
          padding: 10px 20px;
-         background-coler: #4CAF50;
+         background-color: #4CAF50;
          color: white;
-         border: nane;
+         border: none;
          cursor: pointer;
          border-radius: 5px;
       }
@@ -31,10 +31,13 @@
 <body>
    <h1>カウントアップアプリ</h1>
    <p id="counter">0</p>
-   <button onclick="incrementConter()">カウントアップ</button>
+   <button onclick="incrementCounter()">カウントアップ</button>
    
    <script>
       function incrementCounter() {
+         const counterElement = document.getElementById("counter");
+         let currentCount = parseInt(counterElement.textContent);
+         counterElement.textContent = currentCount + 1;
          // ここにカウントアップの処理を記述します
       }
    </script>
