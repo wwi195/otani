@@ -25,6 +25,12 @@
     <h1>天気予報アプリ(準備中)</h1>
     <input type="text" id="cityInput" placeholder="都市名を入力(例: Tokyo)">
     <button onclick="alert('まだ準備中')">天気を取得</button>
-    <p>このアプリは現在開発中です。APIキーを取得してから動作させる予定です。</p>
+    <p id="weatherResult"></p>
+    
+    <script>
+        async function getWeather() {
+            const apiKey = "96f54c3e0c3cc0325004545d57db8f88"; // ここにAPIキーを入力
+            const city = document.getElementById("cityInput").value;
+            const url = `https://api.openweathermap.org/date/2.5/weather?q=${city}&appid=${apikey}&units=metric&lang=ja`;
 </body>
 </html>
