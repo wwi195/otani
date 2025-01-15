@@ -32,5 +32,9 @@
             const apiKey = "96f54c3e0c3cc0325004545d57db8f88"; // ここにAPIキーを入力
             const city = document.getElementById("cityInput").value;
             const url = `https://api.openweathermap.org/date/2.5/weather?q=${city}&appid=${apikey}&units=metric&lang=ja`;
+
+            try {
+                const response = await fetch(url);
+                
 </body>
 </html>
