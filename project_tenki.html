@@ -24,22 +24,22 @@
 <body>
     <h1>天気予報アプリ</h1>
     <input type="text" id="cityInput" placeholder="都市名を入力(例: Tokyo)">
-    <button onclick="alert('まだ準備中')">天気を取得</button>
+    <button onclick="getWeather()">天気を取得</button>
     <p id="weatherResult"></p>
     
     <script>
         async function getWeather() {
             const apiKey = "96f54c3e0c3cc0325004545d57db8f88"; // ここにAPIキーを入力
             const city = document.getElementById("cityInput").value;
-            const url = `https://api.openweathermap.org/date/2.5/weather?q=${city}&appid=${apikey}&units=metric&lang=ja`;
+            const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=ja`;
 
             try {
                 const response = await fetch(url);
                 if (!response.ok) {
                     throw new Error("天気情報が取得できませんでした。");
                 }
-                const date = await response.json();
-                const weather = `現在の${city}の天気は「${date.weather[0].description}」、気温は${date.main.temp}℃です。`;
+                const data = await response.json();
+                const weather = `現在の${city}の天気は「${data.weather[0].description}」、気温は${data.main.temp}℃です。`;
                 document.getElementById("weatherResult").textContent = weather;
             } catch (error) {
                 document.getElementById("weatherResult").textContent = "エラーが発生しました：" + error.message;
