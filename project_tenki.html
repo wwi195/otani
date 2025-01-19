@@ -41,5 +41,10 @@
                 const date = await response.json();
                 const weather = `現在の${city}の天気は「${date.weather[0].description}」、気温は${date.main.temp}℃です。`;
                 document.getElementById("weatherResult").textContent = weather;
+            } catch (error) {
+                document.getElementById("weatherResult").textContent = "エラーが発生しました：" + error.message;
+            }
+        }
+    </script>
 </body>
 </html>
