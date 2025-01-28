@@ -19,7 +19,11 @@
             border-radius: 5px;
             cursor: pointer;
         }
-        button:hover {
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        button:hover:not(:disabled) {
             background-color: #45a049;
         }
         p {
@@ -30,13 +34,20 @@
 </head>
 <body>
     <h1>簡単なタイマー</h1>
-    <button onclick="startTimer()">スタート</button>
+    <button id="startButton" onclick="startTimer()">スタート</button>
     <p id="timerDisplay">10</p>
     
     <script>
+        let interval; // タイマーを管理する変数
+
         function startTimer() {
-            let count = 10;
+            // 既にがタイマーが動いている場合は何もしない
+            const startButton = document.getElementById("startButton");
+            startButton.disabled = true; // ボタンを無効化
+
+            let count = 10; //初期値
             const timerDisplay = document.getElementById("timerDisplay");
+            
             const interval = setInterval(() => {
                 count--;
                 timerDisplay.textContent = count;
