@@ -32,4 +32,20 @@
     <h1>簡単なタイマー</h1>
     <button onclick="startTimer()">スタート</button>
     <p id="timerDisplay">10</p>
-            
+    
+    <script>
+        function startTimer() {
+            let count = 10 ;
+            const timerDisplay = Document.ElementById("timerDisplay");
+            const interbal = setInterbal(() => {
+                count--;
+                timerDisplay.textContent = count;
+                if (count === 0) {
+                    clearInterval(interval);
+                    timerDisplay.textContent = "時間切れ！";
+                }
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
