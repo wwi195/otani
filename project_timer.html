@@ -10,7 +10,7 @@
             text-align: center;
             margin: 50px;
         }
-        button
+        button {
             padding: 10px 20px;
             font-size: 16px;
             background-color: #4CAF50;
@@ -35,9 +35,9 @@
     
     <script>
         function startTimer() {
-            let count = 10 ;
-            const timerDisplay = Document.ElementById("timerDisplay");
-            const interbal = setInterbal(() => {
+            let count = 10;
+            const timerDisplay = document.getElementById("timerDisplay");
+            const interval = setInterval(() => {
                 count--;
                 timerDisplay.textContent = count;
                 if (count === 0) {
