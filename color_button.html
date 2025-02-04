@@ -1,11 +1,11 @@
-<!DOCUTYPE html>
+<!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset"=UTF-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>色が変わるボタン</title>
     <style>
-    body ｛
+    body {
         font-family: Arial, sans-serif;
         text-align: center;
         margin: 50px;
@@ -14,7 +14,7 @@
         button {
             font-size: 20px;
             padding: 10px 20px;
-            background-color: #4CAF50
+            background-color: #4CAF50;
             color: white;
             border: none;
             cursor: pointer;
@@ -23,4 +23,17 @@
         button:hover {
             background-color:#45a049;
         }
+    </style>
 </head>
+<body>
+    <h1>色が変わるボタン</h1>
+    <button onclick="changeColor()">色を変える</button>
+
+    <script>
+        function changeColor() {
+            const randomColor = '#' + Math.floor(Math.random()*16777215).toString(16);
+            document.body.style.backgroundColor = randomColor;
+        }
+    </script>
+</body>
+</html>
