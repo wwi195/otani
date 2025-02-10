@@ -118,63 +118,63 @@
     }
 
     function finalizeRushJudge() {
-        let rushChance = Math.random();
-        if (rushChance < 0.5) {
-            document.getElementById("result").textContent = "🎰 RUSH突入！";
-            isRushMode = true;
-            spinCount = 0;
-            rushWins = 0;
+      let rushChance = Math.random();
+      if (rushChance < 0.5) {
+        document.getElementById("result").textContent = "🎰 RUSH突入！";
+        isRushMode = true;
+        spinCount = 0;
+        rushWins = 0;
 
-            document.getElementById("rushJudge").style.display = "none";
-            document.getElementById("rushButton").style.display = "inline-block";
-            document.getElementById("normalButton").style.display = "none";
+        document.getElementById("rushJudge").style.display = "none";
+        document.getElementById("rushButton").style.display = "inline-block";
+        document.getElementById("normalButton").style.display = "none";
 
-            // 🔽 追加: RUSHボタンを有効化
-            document.getElementById("rushButton").disabled = false;
+        document.getElementById("rushButton").disabled = false;
 
-            historyData[historyData.length - 1].rushStatus = "突入";
-        } else {
-            document.getElementById("result").textContent = "😢 RUSH非突入";
-            document.getElementById("rushJudge").style.display = "none";
+        historyData[historyData.length - 1].rushStatus = "突入";
+      } else {
+        document.getElementById("result").textContent = "😢 RUSH非突入";
+        document.getElementById("rushJudge").style.display = "none";
 
-            historyData[historyData.length - 1].rushStatus = "非突入";
+        historyData[historyData.length - 1].rushStatus = "非突入";
+        spinCount = 0;
+      }
 
-            spinCount = 0; // 🔽 追加: RUSH非突入時も回転数リセット
-        }
-        
-        updateHistory();
-        document.getElementById("normalButton").disabled = false;
+      updateHistory();
+      document.getElementById("normalButton").disabled = false;
+      document.getElementById("rushButton").disabled = false; // 🔽 追加: RUSHボタンも有効化
     }
 
     function playRush() {
-        spinCount++; // RUSH回転数をカウント
-        document.getElementById("counter").textContent = `RUSH試行回数: ${spinCount}回転`;
+      spinCount++;
+      document.getElementById("counter").textContent = `RUSH試行回数: ${spinCount}回転`;
 
-        let jackpotChance = 1 / 9;
-        let randomValue = Math.random();
+      let jackpotChance = 1 / 9;
+      let randomValue = Math.random();
 
-        if (randomValue < jackpotChance) {
-            rushWins++;
-            document.getElementById("result").textContent = `🌟 ${rushWins}連チャン目のRUSH大当たり！ 🌟`;
+      if (randomValue < jackpotChance) {
+        rushWins++;
+        document.getElementById("result").textContent = `🌟 ${rushWins}連チャン目のRUSH大当たり！ 🌟`;
 
-            let continueRush = Math.random();
-            if (continueRush < 0.7) { // 70%でRUSH継続
-                document.getElementById("result").textContent += " 🎰 RUSH継続！";
-                spinCount = 0; // RUSH大当たりしたら試行回数リセット
-            } else {
-                document.getElementById("result").textContent += " ☠ RUSH終了…";
-                isRushMode = false;
-                spinCount = 0;
-                historyData[historyData.length - 1].rushWins = rushWins;
-                rushWins = 0;
-                document.getElementById("rushButton").style.display = "none";
-                document.getElementById("normalButton").style.display = "inline-block";
-            }
+        let continueRush = Math.random();
+        if (continueRush < 0.7) {
+          document.getElementById("result").textContent += " 🎰 RUSH継続！";
+          spinCount = 0;
         } else {
-            document.getElementById("result").textContent = `🌟 ${rushWins}連チャン目中！ 🌟`;
+          document.getElementById("result").textContent += " ☠ RUSH終了…";
+          isRushMode = false;
+          historyData[historyData.length - 1].rushWins = rushWins;
+          rushWins = 0;
+          spinCount = 0;
+          document.getElementById("rushButton").style.display = "none";
+          document.getElementById("normalButton").style.display = "inline-block";
+          document.getElementById("rushButton").disabled = true; // 🔽 追加: RUSH終了時にボタン無効化
         }
+      } else {
+        document.getElementById("result").textContent = `🌟 ${rushWins}連チャン目中！ 🌟`;
+      }
 
-        updateHistory();
+      updateHistory();
     }
 
     function updateHistory() {
@@ -182,7 +182,7 @@
       historyDiv.innerHTML = "";
       historyData.forEach(entry => {
         let newEntry = document.createElement("p");
-        newEntry.innerHTML = `🎯 ${entry.hitNumber}回目の当たり: ${entry.spin}回転目 ↳ RUSH: ${entry.rushStatus || "判定待ち"} ↳ 連チャン: ${entry.rushWins || "-"}回`;
+        newEntry.innerHTML = `🎯 ${entry.hitNumber}回目の当たり: ${entry.spin}回転目 ↳ RUSH: ${entry.rushStatus || "判定待ち"} ↳ 連チャン: ${entry.rushWins !== null ? entry.rushWins : "-"}回`;
         historyDiv.appendChild(newEntry);
       });
     }
