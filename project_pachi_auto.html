@@ -139,42 +139,42 @@
 
             historyData[historyData.length - 1].rushStatus = "非突入";
 
-            // 🔽 追加: RUSH非突入時も回転数リセット
-            spinCount = 0;
-            document.getElementById("counter").textContent = `試行回数: ${spinCount}回転`; // 表示をリセット
+            spinCount = 0; // 🔽 追加: RUSH非突入時も回転数リセット
         }
-
+        
         updateHistory();
         document.getElementById("normalButton").disabled = false;
     }
 
     function playRush() {
-      spinCount++;
-      document.getElementById("counter").textContent = `RUSH試行回数: ${spinCount}回転`;
+        spinCount++; // RUSH回転数をカウント
+        document.getElementById("counter").textContent = `RUSH試行回数: ${spinCount}回転`;
 
-      let jackpotChance = 1 / 9;
-      let randomValue = Math.random();
+        let jackpotChance = 1 / 9;
+        let randomValue = Math.random();
 
-      if (randomValue < jackpotChance) {
-        rushWins++;
-        document.getElementById("result").textContent = `🌟 ${rushWins}連チャン目のRUSH大当たり！ 🌟`;
+        if (randomValue < jackpotChance) {
+            rushWins++;
+            document.getElementById("result").textContent = `🌟 ${rushWins}連チャン目のRUSH大当たり！ 🌟`;
 
-        let continueRush = Math.random();
-        if (continueRush < 0.7) {
-          document.getElementById("result").textContent += " 🎰 RUSH継続！";
+            let continueRush = Math.random();
+            if (continueRush < 0.7) { // 70%でRUSH継続
+                document.getElementById("result").textContent += " 🎰 RUSH継続！";
+                spinCount = 0; // RUSH大当たりしたら試行回数リセット
+            } else {
+                document.getElementById("result").textContent += " ☠ RUSH終了…";
+                isRushMode = false;
+                spinCount = 0;
+                historyData[historyData.length - 1].rushWins = rushWins;
+                rushWins = 0;
+                document.getElementById("rushButton").style.display = "none";
+                document.getElementById("normalButton").style.display = "inline-block";
+            }
         } else {
-          document.getElementById("result").textContent += " ☠ RUSH終了…";
-          isRushMode = false;
-          spinCount = 0;
-          historyData[historyData.length - 1].rushWins = rushWins;
-          rushWins = 0;
-          document.getElementById("rushButton").style.display = "none";
-          document.getElementById("normalButton").style.display = "inline-block";
+            document.getElementById("result").textContent = `🌟 ${rushWins}連チャン目中！ 🌟`;
         }
-      } else {
-        document.getElementById("result").textContent = "はずれ";
-      }
-      updateHistory();
+
+        updateHistory();
     }
 
     function updateHistory() {
