@@ -117,33 +117,36 @@
       }, 1000);
     }
 
-function finalizeRushJudge() {
-  let rushChance = Math.random();
-  if (rushChance < 0.5) {
-    document.getElementById("result").textContent = "🎰 RUSH突入！";
-    isRushMode = true;
-    spinCount = 0;
-    rushWins = 0;
+    function finalizeRushJudge() {
+        let rushChance = Math.random();
+        if (rushChance < 0.5) {
+            document.getElementById("result").textContent = "🎰 RUSH突入！";
+            isRushMode = true;
+            spinCount = 0;
+            rushWins = 0;
 
-    document.getElementById("rushJudge").style.display = "none";
-    document.getElementById("rushButton").style.display = "inline-block";
-    document.getElementById("normalButton").style.display = "none";
+            document.getElementById("rushJudge").style.display = "none";
+            document.getElementById("rushButton").style.display = "inline-block";
+            document.getElementById("normalButton").style.display = "none";
 
-    // 🔽 追加: RUSHボタンを有効化
-    document.getElementById("rushButton").disabled = false;
+            // 🔽 追加: RUSHボタンを有効化
+            document.getElementById("rushButton").disabled = false;
 
-    historyData[historyData.length - 1].rushStatus = "突入";
-  } else {
-    document.getElementById("result").textContent = "😢 RUSH非突入";
-    document.getElementById("rushJudge").style.display = "none";
+            historyData[historyData.length - 1].rushStatus = "突入";
+        } else {
+            document.getElementById("result").textContent = "😢 RUSH非突入";
+            document.getElementById("rushJudge").style.display = "none";
 
-    historyData[historyData.length - 1].rushStatus = "非突入";
-  }
+            historyData[historyData.length - 1].rushStatus = "非突入";
 
-  updateHistory();
-  document.getElementById("normalButton").disabled = false;
-}
+            // 🔽 追加: RUSH非突入時も回転数リセット
+            spinCount = 0;
+            document.getElementById("counter").textContent = `試行回数: ${spinCount}回転`; // 表示をリセット
+        }
 
+        updateHistory();
+        document.getElementById("normalButton").disabled = false;
+    }
 
     function playRush() {
       spinCount++;
