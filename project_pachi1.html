@@ -32,32 +32,37 @@
 <body>
   <h1>パチンコ大当たり抽選</h1>
   <button onclick="playPachinko()">回転開始！</button>
+  <p id="counter">試行回数: 0回転</p>
   <p id="result">ここに結果が表示されます</p>
 
   <script>
     let isRushMode = false; // RUSHモードの判定
+    let spinCount = 0; // 試行回数
 
     function playPachinko() {
-      let jackpotChance = isRushMode ? 1 / 9 : 1 / 32; //RUSH中は確率が変わる
+      spinCount++; // 回転数をカウント
+      document.getElementById("counter").textContent = `試行回数: ${spinCount}回転`;
+
+      let jackpotChance = isRushMode ? 1 / 99 : 1 / 319; //RUSH中は確率が変わる
       let randomValue = Math.random(); // 0~1のランダム数
 
       if (randomValue < jackpotChance) {
         document.getElementById("result").textContent = "🎉 大当たり！ 🎉";
       
-      if (!isRushMode) {
-        let rushChance = Math.random();
-        if (rushChance < 0.5) {
+        if (!isRushMode) {
+         let rushChance = Math.random();
+         if (rushChance < 0.5) {
           document.getElementById("result").textContent += " 🎰 RUSH突入！";
           isRushMode = true;
-        } else {
+          } else {
           document.getElementById("result").textContent += " 😢 RUSH非突入";
           isRushMode = false;
+         }
         }
-      }
-    } else {
+      } else {
       document.getElementById("result").textContent = "はずれ…";
+      }
     }
-  }
   </script>
 </body>
 </html>
