@@ -32,134 +32,56 @@
       font-size: 18px;
       color: #333;
     }
-    #rushJudge {
-      display: none;
-      font-size: 24px;
-      font-weight: bold;
-      color: red;
-    }
-    button:disabled {
-      background-color: gray;
-      cursor: not-allowed;
-    }
-    #history {
-      margin-top: 20px;
-      padding: 10px;
-      border: 1px solid #ccc;
-      background-color: #f9f9f9;
-      text-align: left;
-    }
   </style>
 </head>
 <body>
   <h1>パチンコ大当たり抽選</h1>
   <button id="normalButton" onclick="playPachinko()">回転開始！</button>
   <button id="rushButton" class="rush-button" onclick="playRush()" style="display: none;">🌈 RUSH PLAY 🌈</button>
-  <button id="rushJudgeButton" onclick="startRushJudge()" style="display: none;">RUSH判定開始！</button>
-
   <p id="counter">試行回数: 0回転</p>
   <p id="result">ここに結果が表示されます</p>
-  <p id="rushJudge">RUSH判定中: 3秒</p>
-
-  <h2>🎯 大当たり履歴 🎯</h2>
-  <div id="history"></div>
 
   <script>
     let isRushMode = false; // RUSHモードの判定
     let spinCount = 0; // 試行回数
-    let hitCount = 0; // 当たり回数
-    let rushWins = 0; // 連チャン数
-    let historyData = []; // 履歴を保存
 
     function playPachinko() {
-      if (isRushMode) return;
+      if (isRushMode) return; // RUSH中なら通常ボタンを無効化
 
-      spinCount++;
+      spinCount++; // 回転数をカウント
       document.getElementById("counter").textContent = `試行回数: ${spinCount}回転`;
 
-      let jackpotChance = 1 / 31;
+      let jackpotChance =  1 / 319; // 通常の大当たり確率
       let randomValue = Math.random();
 
       if (randomValue < jackpotChance) {
-        hitCount++;
-        document.getElementById("result").textContent = `🎉 ${hitCount}回目の大当たり！ 🎉`;
-
-        // RUSH判定ボタンを表示
-        document.getElementById("rushJudgeButton").style.display = "inline-block";
-
-        // 大当たり履歴に追加 (まだRUSH判定前)
-        historyData.push({
-          hitNumber: hitCount,
-          spin: spinCount,
-          rushStatus: null, // RUSH判定前
-          rushWins: null, // RUSH回数記録前
-        });
-
-        updateHistory();
+        document.getElementById("result").textContent = "🎉 大当たり！ 🎉";
+      
+        let rushChance = Math.random();
+        if (rushChance < 0.5) {
+          document.getElementById("result").textContent += " 🎰 RUSH突入！";
+          isRushMode = true;
+          spinCount = 0; // RUSHに入ったら回転数リセット
+          document.getElementById("normalButton").style.display = "none"; // 通常ボタンを隠す
+          document.getElementById("rushButton").style.display = "inline-block"; // RUSHボタンを表示
+        } else {
+          document.getElementById("result").textContent += " 😢 RUSH非突入";
+          spinCount = 0; // ★RUSH非突入時もリセット
+        }
       } else {
         document.getElementById("result").textContent = "はずれ";
       }
     }
 
-    function startRushJudge() {
-      let countdown = 3;
-      document.getElementById("rushJudge").style.display = "block";
-      document.getElementById("rushJudgeButton").style.display = "none";
-
-      // ボタン無効化
-      document.getElementById("normalButton").disabled = true;
-      document.getElementById("rushJudgeButton").disabled = true;
-      document.getElementById("rushButton").disabled = true;
-
-      let timer = setInterval(() => {
-        document.getElementById("rushJudge").textContent = `RUSH判定中: ${countdown}秒`;
-        countdown--;
-
-        if (countdown < 0) {
-          clearInterval(timer);
-          finalizeRushJudge();
-        }
-      }, 1000);
-    }
-
-    function finalizeRushJudge() {
-      let rushChance = Math.random();
-      if (rushChance < 0.5) {
-        document.getElementById("result").textContent = "🎰 RUSH突入！";
-        isRushMode = true;
-        spinCount = 0;
-        rushWins = 0;
-
-        // 通常ボタンを隠し、RUSHボタンを表示
-        document.getElementById("rushJudge").style.display = "none";
-        document.getElementById("rushButton").style.display = "inline-block";
-        document.getElementById("normalButton").style.display = "none";
-
-        // 履歴更新
-        historyData[historyData.length - 1].rushStatus = "突入";
-      } else {
-        document.getElementById("result").textContent = "😢 RUSH非突入";
-        document.getElementById("rushJudge").style.display = "none";
-
-        // 履歴更新
-        historyData[historyData.length - 1].rushStatus = "非突入";
-      }
-
-      updateHistory();
-      document.getElementById("normalButton").disabled = false;
-      document.getElementById("rushButton").disabled = false;
-    }
-
     function playRush() {
-      spinCount++;
+      spinCount++; // 回転数をカウント
       document.getElementById("counter").textContent = `RUSH試行回数: ${spinCount}回転`;
-
-      let jackpotChance = 1 / 9;
+    
+      let jackpotChance = 1 / 9; // RUSH中のあたり確率
       let randomValue = Math.random();
 
       if (randomValue < jackpotChance) {
-        rushWins++;
-        document.getElementById("result").textContent = `🌟 ${rushWins}連チャン目のRUSH大当たり！ 🌟`;
+        document.getElementById("result").textContent = "🌟 RUSH大当たり！ 🌟";
 
         let continueRush = Math.random();
         if (continueRush < 0.7) { // 70%でRUSH継続
@@ -167,31 +89,13 @@
         } else {
           document.getElementById("result").textContent += " ☠ RUSH終了…";
           isRushMode = false;
-          spinCount = 0;
-          historyData[historyData.length - 1].rushWins = rushWins;
-          rushWins = 0;
-          document.getElementById("rushButton").style.display = "none";
-          document.getElementById("normalButton").style.display = "inline-block";
+          spinCount = 0; // 通常モードに戻るのでリセット
+          document.getElementById("rushButton").style.display = "none"; // RUSHボタンを隠す
+          document.getElementById("normalButton").style.display = "inline-block"; // 通常ボタンを再表示
         }
       } else {
         document.getElementById("result").textContent = "はずれ";
       }
-
-      updateHistory();
-    }
-
-    function updateHistory() {
-      let historyDiv = document.getElementById("history");
-      historyDiv.innerHTML = ""; // 履歴をクリアして更新
-
-      historyData.forEach(entry => {
-        let newEntry = document.createElement("p");
-        let rushText = entry.rushStatus ? `↳ RUSH: ${entry.rushStatus}` : "↳ RUSH: 判定待ち";
-        let rushWinsText = entry.rushWins !== null ? `↳ 連チャン: ${entry.rushWins}回` : "";
-
-        newEntry.innerHTML = `🎯 ${entry.hitNumber}回目の当たり: ${entry.spin}回転目<br>${rushText}<br>${rushWinsText}`;
-        historyDiv.appendChild(newEntry);
-      });
     }
   </script>
 </body>
