@@ -23,6 +23,11 @@
     button:hover {
       background-color: #45a049;
     }
+    .rush-button {
+      background-image: linear-gradient(to right, red, orange, yellow, green, indigo, violet);
+      color: white;
+      font-weight: bold;
+    }
     p {
       font-size: 18px;
       color: #333;
@@ -31,7 +36,8 @@
 </head>
 <body>
   <h1>パチンコ大当たり抽選</h1>
-  <button onclick="playPachinko()">回転開始！</button>
+  <button id="normalButton" onclick="playPachinko()">回転開始！</button>
+  <button id="rushButton" class="rush-button" onclick="playRush()" style="display: none;">🌈 RUSH PLAY 🌈</button>
   <p id="counter">試行回数: 0回転</p>
   <p id="result">ここに結果が表示されます</p>
 
@@ -40,27 +46,54 @@
     let spinCount = 0; // 試行回数
 
     function playPachinko() {
+      if (isRushMode) return; // RUSH中なら通常ボタンを無効化
+
       spinCount++; // 回転数をカウント
       document.getElementById("counter").textContent = `試行回数: ${spinCount}回転`;
 
-      let jackpotChance = isRushMode ? 1 / 99 : 1 / 319; //RUSH中は確率が変わる
-      let randomValue = Math.random(); // 0~1のランダム数
+      let jackpotChance =  1 / 319; // 通常の大当たり確率
+      let randomValue = Math.random();
 
       if (randomValue < jackpotChance) {
         document.getElementById("result").textContent = "🎉 大当たり！ 🎉";
       
-        if (!isRushMode) {
-         let rushChance = Math.random();
-         if (rushChance < 0.5) {
+        let rushChance = Math.random();
+        if (rushChance < 0.5) {
           document.getElementById("result").textContent += " 🎰 RUSH突入！";
           isRushMode = true;
-          } else {
+          spinCount = 0; // RUSHに入ったら回転数リセット
+          document.getElementById("normalButton").style.display = "none"; // 通常ボタンを隠す
+          document.getElementById("rushButton").style.display = "inline-block"; // RUSHボタンを表示
+        } else {
           document.getElementById("result").textContent += " 😢 RUSH非突入";
-          isRushMode = false;
-         }
         }
       } else {
-      document.getElementById("result").textContent = "はずれ…";
+        document.getElementById("result").textContent = "はずれ";
+      }
+    }
+
+    function playRush() {
+      spinCount++; // 回転数をカウント
+      document.getElementById("counter").textContent = `RUSH試行回数: ${spinCount}回転`;
+    
+      let jackpotChance = 1 / 9; // RUSH中のあたり確率
+      let randomValue = Math.random();
+
+      if (randomValue < jackpotChance) {
+        document.getElementById("result").textContent = "🌟 RUSH大当たり！ 🌟";
+
+        let continueRush = Math.random();
+        if (continueRush < 0.7) { // 70%でRUSH継続
+          document.getElementById("result").textContent += " 🎰 RUSH継続！";
+        } else {
+          document.getElementById("result").textContent += " ☠ RUSH終了…";
+          isRushMode = false;
+          spinCount = 0; // 通常モードに戻るのでリセット
+          document.getElementById("rushButton").style.display = "none"; // RUSHボタンを隠す
+          document.getElementById("normalButton").style.display = "inline-block"; // 通常ボタンを再表示
+        }
+      } else {
+        document.getElementById("result").textContent = "はずれ";
       }
     }
   </script>
