@@ -187,10 +187,11 @@
         let rushWinsText = entry.rushWins !== null ? `↳ 連チャン: ${entry.rushWins}回` : "";
         
         let newEntry = document.createElement("p");
-        newEntry.innerHTML = `🎯 ${entry.hitNumber}回目の当たり: ${entry.spin}回転目 ↳ RUSH: ${entry.rushStatus || "判定待ち"} ↳ 連チャン: ${entry.rushWins !== null ? entry.rushWins : "-"}回`;
+        newEntry.innerHTML = `🎯 ${entry.hitNumber}回目の当たり: ${entry.spin}回転目 <br>${rushText}<br>${rushWinsText}`;
         historyDiv.appendChild(newEntry);
       });
     }
+
   </script>
 </body>
 </html>
