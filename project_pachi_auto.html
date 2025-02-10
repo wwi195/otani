@@ -51,7 +51,7 @@
       spinCount++; // 回転数をカウント
       document.getElementById("counter").textContent = `試行回数: ${spinCount}回転`;
 
-      let jackpotChance =  1 / 319; // 通常の大当たり確率
+      let jackpotChance =  1 / 31; // 通常の大当たり確率
       let randomValue = Math.random();
 
       if (randomValue < jackpotChance) {
