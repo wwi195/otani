@@ -181,6 +181,11 @@
       let historyDiv = document.getElementById("history");
       historyDiv.innerHTML = "";
       historyData.forEach(entry => {
+        let rushText = entry.rushStatus === "突入"
+            ? `↳ RUSH: <span style="color: red;">${entry.rushStatus}</span>`
+            : `↳ RUSH: ${entry.rushStatus || "判定待ち"}`;
+        let rushWinsText = entry.rushWins !== null ? `↳ 連チャン: ${entry.rushWins}回` : "";
+        
         let newEntry = document.createElement("p");
         newEntry.innerHTML = `🎯 ${entry.hitNumber}回目の当たり: ${entry.spin}回転目 ↳ RUSH: ${entry.rushStatus || "判定待ち"} ↳ 連チャン: ${entry.rushWins !== null ? entry.rushWins : "-"}回`;
         historyDiv.appendChild(newEntry);
