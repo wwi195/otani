@@ -38,7 +38,7 @@
     let isRushMode = false; // RUSHモードの判定
 
     function playPachinko() {
-      let jackpotChance = isRushMode ? 1 / 99 : 1 / 319; //RUSH中は確率が変わる
+      let jackpotChance = isRushMode ? 1 / 99 : 1 / 31; //RUSH中は確率が変わる
       let randomValue = Math.random(); // 0~1のランダム数
 
       if (randomValue < jackpotChance) {
