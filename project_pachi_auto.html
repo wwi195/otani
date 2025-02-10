@@ -47,6 +47,7 @@
       padding: 10px;
       border: 1px solid #ccc;
       background-color: #f9f9f9;
+      text-align: left;
     }
   </style>
 </head>
@@ -68,6 +69,7 @@
     let spinCount = 0; // 試行回数
     let hitCount = 0; // 当たり回数
     let rushWins = 0; // 連チャン数
+    let historyData = []; // 履歴を保存
 
     function playPachinko() {
       if (isRushMode) return;
@@ -81,12 +83,19 @@
       if (randomValue < jackpotChance) {
         hitCount++;
         document.getElementById("result").textContent = `🎉 ${hitCount}回目の大当たり！ 🎉`;
-        
+
         // RUSH判定ボタンを表示
         document.getElementById("rushJudgeButton").style.display = "inline-block";
 
-        // 大当たり履歴に記録
-        addToHistory(spinCount, hitCount, "通常当たり");
+        // 大当たり履歴に追加 (まだRUSH判定前)
+        historyData.push({
+          hitNumber: hitCount,
+          spin: spinCount,
+          rushStatus: null, // RUSH判定前
+          rushWins: null, // RUSH回数記録前
+        });
+
+        updateHistory();
       } else {
         document.getElementById("result").textContent = "はずれ";
       }
@@ -119,23 +128,24 @@
         document.getElementById("result").textContent = "🎰 RUSH突入！";
         isRushMode = true;
         spinCount = 0;
+        rushWins = 0;
 
         // 通常ボタンを隠し、RUSHボタンを表示
         document.getElementById("rushJudge").style.display = "none";
         document.getElementById("rushButton").style.display = "inline-block";
         document.getElementById("normalButton").style.display = "none";
 
-        // 履歴に記録
-        addToHistory(spinCount, hitCount, "RUSH突入");
+        // 履歴更新
+        historyData[historyData.length - 1].rushStatus = "突入";
       } else {
         document.getElementById("result").textContent = "😢 RUSH非突入";
         document.getElementById("rushJudge").style.display = "none";
 
-        // 履歴に記録
-        addToHistory(spinCount, hitCount, "RUSH非突入");
+        // 履歴更新
+        historyData[historyData.length - 1].rushStatus = "非突入";
       }
 
-      // ボタンの無効化解除
+      updateHistory();
       document.getElementById("normalButton").disabled = false;
       document.getElementById("rushButton").disabled = false;
     }
@@ -152,29 +162,36 @@
         document.getElementById("result").textContent = `🌟 ${rushWins}連チャン目のRUSH大当たり！ 🌟`;
 
         let continueRush = Math.random();
-        if (continueRush < 0.7) {
+        if (continueRush < 0.7) { // 70%でRUSH継続
           document.getElementById("result").textContent += " 🎰 RUSH継続！";
         } else {
           document.getElementById("result").textContent += " ☠ RUSH終了…";
           isRushMode = false;
           spinCount = 0;
+          historyData[historyData.length - 1].rushWins = rushWins;
           rushWins = 0;
           document.getElementById("rushButton").style.display = "none";
           document.getElementById("normalButton").style.display = "inline-block";
         }
-
-        // 履歴に記録
-        addToHistory(spinCount, hitCount, `RUSH ${rushWins}連`);
       } else {
         document.getElementById("result").textContent = "はずれ";
       }
+
+      updateHistory();
     }
 
-    function addToHistory(spin, count, result) {
+    function updateHistory() {
       let historyDiv = document.getElementById("history");
-      let newEntry = document.createElement("p");
-      newEntry.textContent = `🎯 ${count}回目の当たり: ${spin}回転目 (${result})`;
-      historyDiv.appendChild(newEntry);
+      historyDiv.innerHTML = ""; // 履歴をクリアして更新
+
+      historyData.forEach(entry => {
+        let newEntry = document.createElement("p");
+        let rushText = entry.rushStatus ? `↳ RUSH: ${entry.rushStatus}` : "↳ RUSH: 判定待ち";
+        let rushWinsText = entry.rushWins !== null ? `↳ 連チャン: ${entry.rushWins}回` : "";
+
+        newEntry.innerHTML = `🎯 ${entry.hitNumber}回目の当たり: ${entry.spin}回転目<br>${rushText}<br>${rushWinsText}`;
+        historyDiv.appendChild(newEntry);
+      });
     }
   </script>
 </body>
