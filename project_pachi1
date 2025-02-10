@@ -1,9 +1,63 @@
-<!DOCUTYPE html>
+<!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0";
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>パチンコ大当たりシミュレーター</title>
   <style>
     body {
       font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 50px;
+    }
+    button {
+      font-size: 20px;
+      padding: 10px;
+      margin: 10px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    p {
+      font-size: 18px;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <h1>パチンコ大当たり抽選</h1>
+  <button onclick="playPachinko()">回転開始！</button>
+  <p id="result">ここに結果が表示されます</p>
+
+  <script>
+    let isRushMode = false; // RUSHモードの判定
+
+    function playPachinko() {
+      let jackpotChance = isRushMode ? 1 / 99 : 1 / 319; //RUSH中は確率が変わる
+      let randomValue = Math.random(); // 0~1のランダム数
+
+      if (randomValue < jackpotChance) {
+        document.getElementById("result").textContent = "🎉 大当たり！ 🎉";
+      
+      if (!isRushMode) {
+        let rushChance = Math.random();
+        if (rushChance < 0.5) {
+          document.getElementById("result").textContent += " 🎰 RUSH突入！";
+          isRushMode = true;
+        } else {
+          document.getElementById("result").textContent += " 😢 RUSH非突入";
+          isRushMode = false;
+        }
+      }
+    } else {
+      document.getElementById("result").textContent = "はずれ…";
+    }
+  }
+  </script>
+</body>
+</html>
