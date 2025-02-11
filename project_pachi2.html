@@ -54,7 +54,7 @@
 </head>
 <body>
   <h1>パチンコ大当たり抽選</h1>
-  <p>🎰 大当たり確率: 1/31 | RUSH継続率: 70% | RUSH中確率: 1/9 🎰</p>
+  <p>🎰 大当たり確率: 1/31 | RUSH突入率: 50% | RUSH継続率: 70% | RUSH中確率: 1/9 🎰</p>
 
   <button id="normalButton" onclick="playPachinko()">回転開始！</button>
   <button id="rushButton" class="rush-button" onclick="playRush()" style="display: none;">🌈 RUSH PLAY 🌈</button>
@@ -110,6 +110,25 @@
         document.getElementById("result").textContent = "はずれ";
       }
     }
+
+    function blackoutEffect(callback) {
+        document.body.style.backgroundColor = "black";
+        document.body.style.color = "black";
+  
+        // 🔽 1秒間ボタンを無効化
+        document.querySelectorAll("button").forEach(btn => btn.disabled = true);
+
+        setTimeout(() => {
+            document.body.style.backgroundColor = "white";
+            document.body.style.color = "black";
+      
+            // 🔽 1秒後にボタンを再び有効化
+            document.querySelectorAll("button").forEach(btn => btn.disabled = false);
+
+            if (callback) callback();
+        }, 1000);
+    }
+
 
     function startRushJudge() {
       let countdown = 3;
