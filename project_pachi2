@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>パチンコ大当たりシミュレーター</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 50px;
+      transition: background-color 0.5s; /* 画面演出のためのフェード */
+    }
+    button {
+      font-size: 20px;
+      padding: 10px;
+      margin: 10px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    .rush-button {
+      background-image: linear-gradient(to right, red, orange, yellow, green, indigo, violet);
+      color: white;
+      font-weight: bold;
+    }
+    p {
+      font-size: 18px;
+      color: #333;
+    }
+    #rushJudge {
+      display: none;
+      font-size: 24px;
+      font-weight: bold;
+      color: red;
+    }
+    button:disabled {
+      background-color: gray;
+      cursor: not-allowed;
+    }
+    #history {
+      margin-top: 20px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      background-color: #f9f9f9;
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+  <h1>パチンコ大当たり抽選</h1>
+  <p>🎰 大当たり確率: 1/31 | RUSH継続率: 70% | RUSH中確率: 1/9 🎰</p>
+
+  <button id="normalButton" onclick="playPachinko()">回転開始！</button>
+  <button id="rushButton" class="rush-button" onclick="playRush()" style="display: none;">🌈 RUSH PLAY 🌈</button>
+  <button id="rushJudgeButton" onclick="startRushJudge()" style="display: none;">RUSH判定開始！</button>
+
+  <p id="counter">試行回数: 0回転</p>
+  <p id="result">ここに結果が表示されます</p>
+  <p id="rushJudge">RUSH判定中: 3秒</p>
+
+  <h2>🎯 大当たり履歴 🎯</h2>
+  <div id="history"></div>
+
+  <script>
+    let isRushMode = false;
+    let spinCount = 0;
+    let hitCount = 0;
+    let rushWins = 0;
+    let historyData = [];
+
+    function playPachinko() {
+      if (isRushMode) return;
+
+      spinCount++;
+      document.getElementById("counter").textContent = `試行回数: ${spinCount}回転`;
+
+      let jackpotChance = 1 / 31;
+      let randomValue = Math.random();
+
+      if (randomValue < jackpotChance) {
+        hitCount++;
+
+        // **画面を真っ暗にする演出**
+        document.body.style.backgroundColor = "black";
+        document.getElementById("result").style.color = "white";
+        document.getElementById("result").textContent = "🎇 大当たり演出中… 🎇";
+
+        setTimeout(() => {
+          document.body.style.backgroundColor = "white";
+          document.getElementById("result").style.color = "#333";
+          document.getElementById("result").textContent = `🎉 ${hitCount}回目の大当たり！ 🎉`;
+          document.getElementById("rushJudgeButton").style.display = "inline-block";
+
+          historyData.push({
+            hitNumber: hitCount,
+            spin: spinCount,
+            rushStatus: null,
+            rushWins: null,
+          });
+
+          updateHistory();
+        }, 1000); // 1秒後に元の画面に戻る
+      } else {
+        document.getElementById("result").textContent = "はずれ";
+      }
+    }
+
+    function startRushJudge() {
+      let countdown = 3;
+      document.getElementById("rushJudge").style.display = "block";
+      document.getElementById("rushJudgeButton").style.display = "none";
+
+      document.getElementById("normalButton").disabled = true;
+      document.getElementById("rushButton").disabled = true;
+
+      let timer = setInterval(() => {
+        document.getElementById("rushJudge").textContent = `RUSH判定中: ${countdown}秒`;
+        countdown--;
+
+        if (countdown < 0) {
+          clearInterval(timer);
+          finalizeRushJudge();
+        }
+      }, 1000);
+    }
+
+    function finalizeRushJudge() {
+        let rushChance = Math.random();
+        if (rushChance < 0.5) {
+            document.getElementById("result").textContent = "🎰 RUSH突入！";
+            isRushMode = true;
+            spinCount = 0;
+            rushWins = 0;
+
+            document.getElementById("rushJudge").style.display = "none";
+            document.getElementById("rushButton").style.display = "inline-block";
+            document.getElementById("normalButton").style.display = "none";
+
+            document.getElementById("rushButton").disabled = false;
+
+            historyData[historyData.length - 1].rushStatus = "突入";
+        } else {
+            document.getElementById("result").textContent = "😢 RUSH非突入";
+            document.getElementById("rushJudge").style.display = "none";
+
+            historyData[historyData.length - 1].rushStatus = "非突入";
+            spinCount = 0;
+        }
+        
+        updateHistory();
+        document.getElementById("normalButton").disabled = false;
+    }
+
+    function playRush() {
+        spinCount++;
+        document.getElementById("counter").textContent = `RUSH試行回数: ${spinCount}回転`;
+
+        let jackpotChance = 1 / 9;
+        let randomValue = Math.random();
+
+        if (randomValue < jackpotChance) {
+            rushWins++;
+
+            // **RUSH大当たり時も画面を真っ暗にする演出**
+            document.body.style.backgroundColor = "black";
+            document.getElementById("result").style.color = "white";
+            document.getElementById("result").textContent = "🎇 RUSH大当たり演出中… 🎇";
+
+            setTimeout(() => {
+              document.body.style.backgroundColor = "white";
+              document.getElementById("result").style.color = "#333";
+              document.getElementById("result").textContent = `🌟 ${rushWins}連チャン目のRUSH大当たり！ 🌟`;
+
+              let continueRush = Math.random();
+              if (continueRush < 0.7) { 
+                  document.getElementById("result").textContent += " 🎰 RUSH継続！";
+                  spinCount = 0;
+              } else {
+                  document.getElementById("result").textContent += " ☠ RUSH終了…";
+                  isRushMode = false;
+                  spinCount = 0;
+                  historyData[historyData.length - 1].rushWins = rushWins;
+                  rushWins = 0;
+                  document.getElementById("rushButton").style.display = "none";
+                  document.getElementById("normalButton").style.display = "inline-block";
+              }
+
+              updateHistory();
+            }, 1000);
+        } else {
+            document.getElementById("result").textContent = `🌟 ${rushWins}連チャン目中！ 🌟`;
+        }
+    }
+  </script>
+</body>
+</html>
