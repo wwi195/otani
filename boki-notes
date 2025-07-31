@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>簿記3級　勘定科目ノート</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 2rem;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            margin-bottom: 1rem;
+        }
+        select {
+            padding: .4rem;
+            margin-bottom: 1rem;
+        }
+        .item {
+            border: 1px solid #ccc;
+            padding: .8rem;
+            margin-bottom: .8rem;
+            background-color: #fff;
+        }
+        .category {
+            font-size: 0.9rem;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>簿記3級　勘定科目ノート</h1>
+
+    <label>カテゴリで絞る:
+        <select id="categoryFilter">
+            <option value="すべて">すべて</option>
+            <option value="資産">資産</option>
+            <option value="負債">負債</option>
+            <option value="収益">収益</option>
+            <option value="費用">費用</option>
+        </select>
+    </label>
+
+    <div id="list"></div>
+
+    <script>
+        const items = [
+            { name: "現金", category: "資産", description: "手元にある現金のこと" },
+            { name: "売掛金", category: "資産", description: "後でもらえるお金のこと（商品の販売など）" },
+            { name: "買掛金", category: "負債", description: "後で払う必要のあるお金（仕入れなど） "},
+            { name: "売上", category: "収益", description: "商品やサービスを売った事で得た収入" },
+            { name: "仕入", category: "費用", description: "商品を仕入れたときの費用" },
+            { name: "水道光熱費", category: "費用", description: "電気代・水道代などの経費" },
+            { name: "借入金", category: "負債", description: "借りているお金のこと" },
+            { name: "支払手形", category: "負債", description: "代金として約束手形を渡し、期日に手形分のお金を支払う義務" },
+            { name: "当座預金", category: "資産", description: "企業や個人事業主向けの、小切手や手形などを用いる決済専用の銀行口座" },
+            { name: "普通預金", category: "資産", description: "ATMで出金、入金などができる、一般の銀行口座" },
+            { name: "受取手形", category: "資産", description: "代金として約束手形を受け取り、期日に手形をお金と引き換える権利" },
+            { name: "売掛金", category: "資産", description: "商品を掛けで売った時に、あとで代金がもらえる権利" },
+            { name: "繰越商品", category: "資産", description: "商品の在庫で、期をまたぐもの" },
+            { name: "前払金", category: "資産", description: "手付金、内金、商品購入時に、先に支払うお金。後に商品を受け取る権利" },
+            { name: "未収入金", category: "資産", description: "商品以外の物を後払いで売却した時に、あとでお金を受け取る権利" },
+            { name: "貯蔵品", category: "資産", description: "切手や文房具など、商品以外の物で、未使用のまま期をまたぐ物" },
+            { name: "仮払消費税", category: "資産", description: "商品の購入時に支払った消費税。消費税を納める際に、受け取った消費税から仮払消費税分を相殺できるので、資産である。税抜方式で記帳するときに用いる" },
+            { name: "仮払法人税", category: "資産", description: "期の途中で概算額として支払う法人税等。法人税等を納める際に、仮払法人税等の分を相殺できるので、資産である" },
+            { name: "備品", category: "資産", description: "固定資産の一つ。パソコンや机など、販売目的でなく、社内で1年以上利用するために購入したもの" },
+            { name: "小口現金", category: "資産", description: "車内で発生する経費をすぐに精算するために手元に持っておく現金" },
+            { name: "クレジット売掛金", category: "資産", description: "商品をクレジットカード払いで売った時に、あとでクレジットカード会社から代金がもらえる権利" },
+            { name: "電子記録債権", category: "資産", description: "商品を掛けで売った時に、その取引の内容を電子化したもの。後に代金を受け取ることのできる権利" },
+            { name: "貸付金", category: "資産", description: "期限や利子を決めて貸すお金。後にお金を受け取る権利" },
+            { name: "立替金", category: "資産", description: "取引先や従業員が支払うべき代金を一時的に立て替えたお金。後に代金を受け取ることのできる権利" },
+            { name: "受取商品券", category: "資産", description: "商品の販売時に、代金として受け取った商品券。後に換金できる権利" },
+            { name: "差入保証金", category: "資産", description: "敷金など、取引や賃貸借の契約の履行が保証されるよう支払うお金。後に契約通りに受け取れる権利" },
+            { name: "前払利息", category: "資産", description: "来期の利息のうち、当期に支払済の利息。前払がついている科目は、「後で支払う必要がない」ことを意味するので、資産" },
+            { name: "前払保険料", category: "資産", description: "来期の保険料のうち、当期に支払済の保険料。前払がついている科目は、「後で支払う必要がない」ことを意味するので、資産" },
+            { name: "前払家賃", category: "資産", description: "来期の家賃のうち、当期に支払済の家賃。前払いがついている科目は、「後で支払う必要がない」ことを意味するので、資産" },
+            { name: "前払地代", category: "資産", description: "来期の地代のうち、当期に支払済の地代。前払がついている科目は、「後で支払う必要がない」ことを意味するので、資産" },
+            { name: "前払費用", category: "資産", description: "来期の費用のうち、当期に支払済の費用。前払いがついている科目は、「後で支払う必要がない」ことを意味するので、資産" },
+            { name: "未収利息", category: "資産", description: "当期の利息のうち、来期に受け取り予定の利息。未収がついている科目は「後で受け取ることができる」ことを意味するので、資産" },
+            { name: "未収手数料", category: "資産", description: "当期の手数料のうち、来期に受け取り予定の手数料。未収がついている科目は「後で受け取ることができる」ことを意味するので、資産" },
+            { name: "未収家賃", category: "資産", description: "当期の家賃のうち、来期に受け取り予定の家賃。未収がついている科目は「後で受け取ることができる」ことを意味するので、資産" },
+            { name: "未収地代", category: "資産", description: "当期の地代のうち、来期に受け取り予定の地代。未収がついている科目は「後で受け取ることができる」ことを意味するので、資産" },
+            { name: "未収収益", category: "資産", description: "当期の収益のうち、来期に受け取り予定の収益。未収がついている科目は「後で受け取りができる」ことを意味するので、資産" },
+            { name: "建物", category: "資産", description: "固定資産の一つ。社屋や店舗などの、企業が業務上利用する物" },
+            { name: "土地", category: "資産", description: "固定資産の一つ。建物や駐車場などのために、企業が業務上利用する土地" },
+            { name: "車両運搬具", category: "資産", description: "固定資産の一つ。トラックや営業車などの、企業が業務上利用する車両" },
+            // { name: "", category: "", description: "" },
+        ];
+
+        const listEl = document.getElementById("list");
+        const filterEl = document.getElementById("categoryFilter");
+
+        function renderList(filteredItems) {
+            listEl.innerHTML = "";
+            filteredItems.forEach(item => {
+                const div = document.createElement("div");
+                div.className = "item";
+                div.innerHTML = `
+                    <strong>${item.name}</strong>
+                    <div class="category">[${item.category}]</div>
+                    <div>${item.description}</div>
+                `;
+                listEl.appendChild(div);   
+            });
+        }
+
+        // 初期表示
+        renderList(items);
+
+        // カテゴリでフィルター
+        filterEl.addEventListener("change", () => {
+            const selected = filterEl.value;
+            if (selected === "すべて") {
+                renderList(items);
+            } else {
+                const filtered = items.filter(i => i.category === selected);
+                renderList(filtered);
+            }
+        });
+    </script>
+
+</body>
+</html>
